@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql/mysql-server:5.7.12
+    platform: linux/amd64
+    ports:
+      - "23306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    command: [
+      '--wait_timeout=3',
+    ]
+    restart: always
+    networks:
+      - mysql-network
+
+  cli:
+    image: mysql/mysql-server:5.7.12
+    platform: linux/amd64
+    networks:
+      - mysql-network
+    command: mysql -hmysql -uuser -ppassword db
+
+networks:
+  mysql-network:
+    driver: bridge
